@@ -1,6 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from mmengine.utils import is_str
 
+def fashionpedia_classes():
+    """Fashionpedia class names for external use."""
+    return [
+        'road', 'sidewalk', 'building', 'wall', 'fence', 'pole',
+        'traffic light', 'traffic sign', 'vegetation', 'terrain', 'sky',
+        'person', 'rider', 'car', 'truck', 'bus', 'train', 'motorcycle',
+        'bicycle'
+    ]
+
 
 def cityscapes_classes():
     """Cityscapes class names for external use."""
@@ -261,6 +270,17 @@ def mapillary_v2_palette():
             [111, 111, 0], [0, 0, 0]]
 
 
+def fashionpedia_palette():
+    """Fashionpedia palette for external use."""
+    return [[128, 64, 128], [244, 35, 232], [70, 70, 70], [102, 102, 156],
+            [190, 153, 153], [153, 153, 153], [250, 170, 30], [220, 220, 0],
+            [107, 142, 35], [152, 251, 152], [70, 130, 180],
+            [220, 20, 60], [255, 0, 0], [0, 0, 142], [0, 0, 70],
+            [0, 60, 100], [0, 80, 100], [0, 0, 230], [119, 11, 32]
+            [64, 128, 0], [192, 192, 32], [128, 96, 192], [64, 0, 128],
+            [64, 64, 32], [0, 224, 192], [192, 0, 0], [192, 64, 160]]
+
+
 def cityscapes_palette():
     """Cityscapes palette for external use."""
     return [[128, 64, 128], [244, 35, 232], [70, 70, 70], [102, 102, 156],
@@ -475,6 +495,7 @@ def bdd100k_palette():
 
 dataset_aliases = {
     'cityscapes': ['cityscapes'],
+    'fashionpedia': ['fashionpedia'],
     'ade': ['ade', 'ade20k'],
     'voc': ['voc', 'pascal_voc', 'voc12', 'voc12aug'],
     'pcontext': ['pcontext', 'pascal_context', 'voc2010'],
