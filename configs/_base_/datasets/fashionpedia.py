@@ -1,13 +1,13 @@
 # dataset settings
 dataset_type = 'FashionpediaDataset'
-data_root = 'data/cityscapes/'
+data_root = '/data-fast/fashionpedia'
 crop_size = (512, 512)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
     dict(
         type='RandomResize',
-        scale=(1792, 2176),
+        scale=(2176, 1792),
         ratio_range=(0.5, 2.0),
         keep_ratio=True),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
@@ -16,7 +16,7 @@ train_pipeline = [
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='Resize', scale=(1792, 2176), keep_ratio=True),
+    dict(type='Resize', scale=(2176, 1792), keep_ratio=True),
     # add loading annotation after ``Resize`` because ground truth
     # does not need to do resize data transform
     dict(type='LoadAnnotations'),
@@ -40,7 +40,7 @@ tta_pipeline = [
 ]
 train_dataloader = dict(
     batch_size=1,
-    num_workers=2,
+    num_workers=1,
     persistent_workers=True,
     sampler=dict(type='InfiniteSampler', shuffle=True),
     dataset=dict(
@@ -51,14 +51,14 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 val_dataloader = dict(
     batch_size=1,
-    num_workers=2,
+    num_workers=1,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
         data_prefix=dict(
-            img_path='images/val', seg_map_path='masks/val'),
+            img_path='images/test', seg_map_path='masks/test'),
         pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
