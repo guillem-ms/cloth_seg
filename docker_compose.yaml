@@ -1,0 +1,21 @@
+networks:
+  default:
+    name: <name>
+services:
+  youaddict_mmseg: 
+    image: <image:tag> 
+    container_name: <container_name>
+    ipc: host
+    tty: true
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    volumes:
+      - <code-volume> 
+      - <data-volume> 
+    working_dir: <project-path>
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
