@@ -16,7 +16,7 @@ train_pipeline = [
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='Resize', scale=(2176, 1792), keep_ratio=True),
+    dict(type='Resize', scale=(1802, 1484), keep_ratio=True),
     # add loading annotation after ``Resize`` because ground truth
     # does not need to do resize data transform
     dict(type='LoadAnnotations'),
@@ -58,7 +58,7 @@ val_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         data_prefix=dict(
-            img_path='images/test', seg_map_path='masks/test'),
+            img_path='images/val', seg_map_path='masks/val'),
         pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
