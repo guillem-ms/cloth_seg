@@ -10,10 +10,10 @@ class FashionpediaDataset(BaseSegDataset):
     fixed to '_seg.png' for Fashionpedia dataset.
     """
     METAINFO = dict(
-        classes=('shirt, bluse', 'top, t-shirt, sweatshirt', 'sweater', 'cardigan', 'jacket', 'vest',
+        classes=('background', 'shirt, bluse', 'top, t-shirt, sweatshirt', 'sweater', 'cardigan', 'jacket', 'vest',
                  'pants', 'shorts', 'skirt', 'coat', 'dress', 'jumpsuit', 'cape', 'glasses', 'hat', 'headband, head covering, hair accessory', 
                  'tie', 'glove', 'watch', 'belt', 'leg warmer', 'tights, stockings', 'sock', 'shoe', 'bag, wallet', 'scarf', 'umbrella'),
-        palette=[[0, 0, 85], [0, 0, 170], [0, 0, 255], [0, 85, 0], [0, 85, 85], [0, 85, 170], [0, 85, 255], [0, 170, 0],
+        palette=[[0, 0, 0], [0, 0, 85], [0, 0, 170], [0, 0, 255], [0, 85, 0], [0, 85, 85], [0, 85, 170], [0, 85, 255], [0, 170, 0],
                  [0, 170, 85], [0, 170, 170], [0, 170, 255], [0, 255, 0], [0, 255, 85], [0, 255, 170], [0, 255, 255],
                  [85, 0, 0], [85, 0, 85], [85, 0, 170], [85, 0, 255], [85, 85, 0], [85, 85, 85], [85, 85, 170], [85, 85, 255], 
                  [85, 170, 0], [85, 170, 85], [85, 170, 170], [85, 170, 255]]
