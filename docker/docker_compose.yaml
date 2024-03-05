@@ -2,8 +2,8 @@ networks:
   default:
     name: <name>
 services:
-  youaddict_mmseg: 
-    image: <image:tag> 
+  <serv_name>: 
+    image: <image>
     container_name: <container_name>
     ipc: host
     tty: true
@@ -11,9 +11,9 @@ services:
       memlock: -1
       stack: 67108864
     volumes:
-      - <code-volume> 
-      - <data-volume> 
-    working_dir: <project-path>
+      - <code_volumes>
+      - <data_voluumes>
+    working_dir: <code_path>
     deploy:
       resources:
         reservations:
