@@ -1,35 +1,58 @@
-ARG PYTORCH="1.11.0"
-ARG CUDA="11.3"
-ARG CUDNN="8"
-ARG MMCV="2.0.1"
+FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-devel
 
-FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
+ARG USER_NAME=<username>
+ARG UID=<userid>
+ARG GROUP_NAME=<groupname>
+ARG GID=<groupid>
 
-ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0+PTX"
-ENV TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
-ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
+ENV CONDA_ENV_NAME=devel
+ENV PYTHON_VERSION=3.10.13
+ENV DEBIAN_FRONTEND noninteractive
 
-# To fix GPG key error when running apt-get update
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
+# Update the system and install required packages
+RUN apt-get update && apt-get upgrade -y && apt-get install -y sudo git apt-utils htop wget screen libgl1 libglib2.0-0
 
-RUN apt-get update && apt-get install -y git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-dev  \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Create a new group with the same GID as the host
+RUN groupadd --gid $GID $GROUP_NAME
+# Create a new user with the same UID and GID as the host
+RUN useradd --uid $UID --gid $GID --shell /bin/bash --create-home $USER_NAME
 
-RUN conda clean --all
+# don't require password with sudo, for convenience
+# not the safest thing to do, but hopefully okay inside the container
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Install MMCV
-ARG PYTORCH
-ARG CUDA
-ARG MMCV
-RUN ["/bin/bash", "-c", "pip install openmim"]
-RUN ["/bin/bash", "-c", "mim install mmengine"]
-RUN ["/bin/bash", "-c", "mim install mmcv==${MMCV}"]
+# Add the new user to the sudo group
+RUN usermod -aG sudo ${USER_NAME}
 
-# Install MMSegmentation
-RUN git clone -b main https://github.com/open-mmlab/mmsegmentation.git /mmsegmentation
-WORKDIR /mmsegmentation
-ENV FORCE_CUDA="1"
-RUN pip install -r requirements.txt
-RUN pip install --no-cache-dir -e .
+USER $USER_NAME
+
+# Install Miniconda and create main env
+ADD --chown=${USER_NAME}:${GROUP_NAME} https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh /home/${USER_NAME}/miniconda3.sh 
+RUN /bin/bash /home/${USER_NAME}/miniconda3.sh -b -p /home/${USER_NAME}/conda \
+    && echo export PATH=/home/${USER_NAME}/conda/bin:$PATH >> /home/${USER_NAME}/bashrc \
+    && rm /home/${USER_NAME}/miniconda3.sh
+
+ENV PATH="/home/${USER_NAME}/conda/bin:${PATH}"
+RUN conda create -n ${CONDA_ENV_NAME} -y python=${PYTHON_VERSION} 
+
+# Switch to bash shell
+SHELL ["/bin/bash", "-c"]y
+
+WORKDIR /home/${USER_NAME}
+
+RUN source activate ${CONDA_ENV_NAME} \
+    && pip3 install --upgrade pip \
+    && pip install ftfy regex future tensorboard tensorboardX wandb torch-tb-profiler chardet \
+    && conda install -y pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=12.1 -c pytorch -c nvidia \
+    && pip3 install -U openmim \
+    && mim install mmengine \
+    && mim install "mmcv>=2.0.0"
+
+RUN git clone -b main https://github.com/guillem-ms/cloth_seg.git
+WORKDIR /home/${USER_NAME}/cloth_seg
+RUN source activate ${CONDA_ENV_NAME} \
+    && pip install -r requirements.txt \
+    && pip install --no-cache-dir -e .
+
+RUN echo "source activate ${CONDA_ENV_NAME}" >> /home/${USER_NAME}/.bashrc
+ENV DEBIAN_FRONTEND teletype
