@@ -5,6 +5,7 @@ Collections:
     Training Data:
     - ADE20K
     - Cityscapes
+    - Fashionpedia
   Paper:
     Title: 'SegFormer: Simple and Efficient Design for Semantic Segmentation with
       Transformers'
