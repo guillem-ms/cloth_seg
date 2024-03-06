@@ -33,7 +33,7 @@ def main(args):
     )
     make_dir_if_not_exists(args.out_dir)
     for img in tqdm(os.listdir(args.input_folder)):
-        result = inference_model(model, f"{args.input_folder}/{img}")
+        result = inference_model(model, f"{args.input_folder}/{img}")  # here you can either specify a path to the image or a numpy array
         show_result_pyplot(
             model, 
             img=f"{args.input_folder}/{img}", 
