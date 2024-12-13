@@ -1,13 +1,13 @@
 # dataset settings
 dataset_type = 'FashionpediaDataset'
 data_root = '/data-fast/fashionpedia'
-crop_size = (256, 256)
+crop_size = (768, 768)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
     dict(
         type='RandomResize',
-        scale=(2176, 1792),
+        scale=(1536, 1265),
         ratio_range=(0.5, 2.0),
         keep_ratio=True),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
@@ -16,7 +16,7 @@ train_pipeline = [
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='Resize', scale=(1802, 1484), keep_ratio=True),
+    dict(type='Resize', scale=(1536, 1265), keep_ratio=True),
     dict(type='LoadAnnotations'),
     dict(type='PackSegInputs')
 ]

@@ -11,6 +11,13 @@ def fashionpedia_classes():
     ]
 
 
+def pog_classes():
+    """POG class names for external use."""
+    return [
+        'garment'
+    ]
+
+
 def cityscapes_classes():
     """Cityscapes class names for external use."""
     return [
