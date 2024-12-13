@@ -36,7 +36,7 @@ ENV PATH="/home/${USER_NAME}/conda/bin:${PATH}"
 RUN conda create -n ${CONDA_ENV_NAME} -y python=${PYTHON_VERSION} 
 
 # Switch to bash shell
-SHELL ["/bin/bash", "-c"]y
+SHELL ["/bin/bash", "-c"]
 
 WORKDIR /home/${USER_NAME}
 
@@ -52,7 +52,8 @@ RUN git clone -b main https://github.com/guillem-ms/cloth_seg.git
 WORKDIR /home/${USER_NAME}/cloth_seg
 RUN source activate ${CONDA_ENV_NAME} \
     && pip install -r requirements.txt \
-    && pip install --no-cache-dir -e .
+    && pip install --no-cache-dir -e . \
+    && pip install "numpy<2.0"
 
 RUN echo "source activate ${CONDA_ENV_NAME}" >> /home/${USER_NAME}/.bashrc
 ENV DEBIAN_FRONTEND teletype
